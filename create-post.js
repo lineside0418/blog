@@ -141,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${title} - 先生のブログ</title>
+    <title>${title} - lineside's Blog</title>
     <link rel="stylesheet" href="${relativePathPrefix}../style.css">
     <link rel="stylesheet" href="${relativePathPrefix}./blog-post-styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -158,9 +158,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     <div class="container">
         <header class="glass-effect">
-            <a href="${relativePathPrefix}../index.html" class="logo">先生のブログ</a>
+            <a href="${relativePathPrefix}../index.html" class="logo">lineside's Blog</a>
             <nav>
-                <a href="${relativePathPrefix}../index.html">ホーム</a>
+                <a href="${relativePathPrefix}../index.html">Home</a>
                 <a href="${relativePathPrefix}../about.html">About me</a>
             </nav>
             <button class="theme-toggle-button" id="theme-toggle">
@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
         </main>
 
         <footer>
-            <p>© 2025 先生のブログ. All rights reserved.</p>
+            <p>© 2025 lineside's Blog. All rights reserved.</p>
         </footer>
     </div>
 

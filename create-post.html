@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>先生のブログ - 記事作成</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* create-post.html 独自のスタイル */
+        .create-post-section {
+            padding: 40px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .create-post-section h1 {
+            font-size: 2.4em;
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 1.1em;
+            margin-bottom: 8px;
+            color: var(--text-color-light);
+            font-weight: 500;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="url"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="url"]:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.3);
+        }
+
+        /* エディタツールバー */
+        .editor-toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.15); /* グラスモーフィズム背景 */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .editor-toolbar button,
+        .editor-toolbar select {
+            background-color: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 0.9em;
+            color: var(--text-color);
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 38px; /* アイコンだけのボタンの幅 */
+        }
+
+        .editor-toolbar button i {
+            margin: 0;
+        }
+
+        .editor-toolbar button:hover,
+        .editor-toolbar select:hover {
+            background-color: rgba(0, 123, 255, 0.1);
+            border-color: var(--accent-color);
+        }
+
+        .editor-toolbar button:active {
+            transform: translateY(1px);
+        }
+
+        .editor-toolbar select {
+            appearance: none; /* デフォルトの矢印を非表示 */
+            padding-right: 25px; /* 矢印分のスペース */
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23333%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.1L146.2%20227.5%2018.5%2074.5a17.6%2017.6%200%200%200-25.3%2023.3l130.8%20131.7c6.7%206.7%2017.5%206.7%2024.2%200l130.7-131.6c6.8-6.7%206.8-17.7.1-24.4z%22%2F%3E%3C%2Fsvg%3E'); /* カスタム矢印 */
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 10px;
+        }
+        body.dark-mode .editor-toolbar select {
+            background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23e0e0e0%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13%205.1L146.2%20227.5%2018.5%2074.5a17.6%2017.6%200%200%200-25.3%2023.3l130.8%20131.7c6.7%206.7%2017.5%206.7%2024.2%200l130.7-131.6c6.8-6.7%206.8-17.7.1-24.4z%22%2F%3E%3C%2Fsvg%3E');
+        }
+
+
+        .editor-content {
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            min-height: 300px;
+            padding: 15px;
+            font-size: 1.1em;
+            color: var(--text-color);
+            line-height: 1.8;
+            outline: none;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            cursor: text;
+        }
+
+        .editor-content:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(var(--accent-color-rgb), 0.3);
+        }
+
+        /* ダークモード時のエディタツールバーとコンテンツエリア */
+        body.dark-mode .editor-toolbar {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        body.dark-mode .editor-toolbar button,
+        body.dark-mode .editor-toolbar select {
+            border-color: rgba(255, 255, 255, 0.25);
+            color: var(--text-color);
+        }
+        body.dark-mode .editor-toolbar button:hover,
+        body.dark-mode .editor-toolbar select:hover {
+            background-color: rgba(137, 207, 240, 0.1);
+            border-color: var(--accent-color);
+        }
+        body.dark-mode .editor-content {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-color);
+        }
+
+        .generate-button {
+            background-color: var(--accent-color);
+            color: #fff;
+            padding: 15px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
+            align-self: flex-start;
+        }
+
+        .generate-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .output-section {
+            margin-top: 30px;
+        }
+
+        .output-section h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+            color: var(--text-color);
+        }
+
+        .generated-html {
+            background: rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Roboto Mono', monospace;
+            font-size: 0.9em;
+            color: var(--text-color);
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-x: auto;
+            min-height: 150px;
+            line-height: 1.6;
+            transition: background var(--transition-duration) var(--transition-timing-function), border var(--transition-duration) var(--transition-timing-function), color var(--transition-duration) var(--transition-timing-function);
+        }
+
+        body.dark-mode .generated-html {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: var(--text-color);
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            .create-post-section {
+                padding: 25px;
+            }
+            .create-post-section h1 {
+                font-size: 2em;
+            }
+            .form-group label {
+                font-size: 1em;
+            }
+            .form-group input[type="text"],
+            .form-group input[type="url"] {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+            .editor-toolbar {
+                padding: 8px;
+                gap: 5px;
+            }
+            .editor-toolbar button,
+            .editor-toolbar select {
+                padding: 6px 10px;
+                font-size: 0.8em;
+                min-width: 32px;
+            }
+            .editor-content {
+                min-height: 250px;
+                padding: 12px;
+                font-size: 1em;
+            }
+            .generate-button {
+                padding: 12px 20px;
+                font-size: 1em;
+            }
+            .output-section h2 {
+                font-size: 1.5em;
+            }
+            .generated-html {
+                padding: 15px;
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loading-spinner"></div>
+        <span id="loading-text"></span>
+    </div>
+
+    <div id="theme-transition-overlay">
+        <span id="theme-transition-text"></span>
+    </div>
+
+    <div class="container">
+        <header class="glass-effect">
+            <a href="index.html" class="logo">先生のブログ</a>
+            <nav>
+                <a href="index.html">ホーム</a>
+                <a href="about.html">About me</a>
+                <a href="create-post.html">記事作成</a>
+            </nav>
+            <button class="theme-toggle-button" id="theme-toggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </header>
+
+        <section class="create-post-section glass-effect">
+            <h1>新しいブログ記事を作成しよう！</h1>
+            <div class="form-group">
+                <label for="postTitle">記事タイトル:</label>
+                <input type="text" id="postTitle" placeholder="【最新】生成AIがデザインを変える！未来のUI/UXとは？">
+            </div>
+            <div class="form-group">
+                <label for="postDate">公開日 (YYYY-MM-DD):</label>
+                <input type="text" id="postDate" placeholder="例: 2025-06-30" value="2025-06-30">
+            </div>
+            <div class="form-group">
+                <label for="postTags">タグ (カンマ区切り):</label>
+                <input type="text" id="postTags" placeholder="例: AI, デザイン, UI/UX, テクノロジー">
+            </div>
+            <div class="form-group">
+                <label for="postImage">記事トップ画像URL:</label>
+                <input type="url" id="postImage" placeholder="例: https://via.placeholder.com/1000x500/A1C4FD/C2E9FB?text=AI+Design+Concept">
+            </div>
+
+            <div class="form-group">
+                <label for="editorContent">記事本文:</label>
+                <div class="editor-toolbar">
+                    <button type="button" data-command="bold" title="太字"><i class="fas fa-bold"></i></button>
+                    <button type="button" data-command="italic" title="斜体"><i class="fas fa-italic"></i></button>
+                    <button type="button" data-command="underline" title="下線"><i class="fas fa-underline"></i></button>
+                    <button type="button" data-command="strikethrough" title="打ち消し線"><i class="fas fa-strikethrough"></i></button>
+                    <button type="button" data-command="insertOrderedList" title="番号付きリスト"><i class="fas fa-list-ol"></i></button>
+                    <button type="button" data-command="insertUnorderedList" title="箇条書きリスト"><i class="fas fa-list-ul"></i></button>
+                    <select data-command="formatBlock" id="formatBlockSelect" title="見出し">
+                        <option value="p">段落</option>
+                        <option value="h1">見出し 1</option>
+                        <option value="h2">見出し 2</option>
+                        <option value="h3">見出し 3</option>
+                    </select>
+                    <button type="button" data-command="createLink" title="リンク挿入"><i class="fas fa-link"></i></button>
+                    <button type="button" data-command="insertImage" title="画像挿入"><i class="fas fa-image"></i></button>
+                    <button type="button" data-command="insertCodeBlock" title="コードブロック挿入"><i class="fas fa-code"></i></button>
+                    <button type="button" data-command="insertBlockquote" title="引用"><i class="fas fa-quote-right"></i></button>
+                    
+                    <select data-command="foreColor" id="foreColorSelect" title="文字色">
+                        <option value="">文字色</option>
+                        <option value="var(--color-dark)">黒</option>
+                        <option value="var(--color-red)">赤</option>
+                        <option value="var(--color-blue)">青</option>
+                        <option value="var(--color-green)">緑</option>
+                        <option value="var(--color-orange)">オレンジ</option>
+                        <option value="var(--color-purple)">紫</option>
+                    </select>
+                    <select data-command="backColor" id="backColorSelect" title="背景色">
+                        <option value="">背景色</option>
+                        <option value="var(--color-light)">明るい</option>
+                        <option value="var(--color-red)">赤</option>
+                        <option value="var(--color-blue)">青</option>
+                        <option value="var(--color-green)">緑</option>
+                        <option value="var(--color-orange)">オレンジ</option>
+                        <option value="var(--color-purple)">紫</option>
+                    </select>
+                </div>
+                <div id="editorContent" class="editor-content" contenteditable="true">
+                    <p>ここに記事の本文を入力してね。<b>太字</b>や<i>斜体</i>、<span style="color:var(--color-red);">色付き文字</span>も使えるよ！</p>
+                    <h2>これは見出し2だよ</h2>
+                    <ul>
+                        <li>リストアイテム1</li>
+                        <li>リストアイテム2</li>
+                    </ul>
+                    <p><code>console.log('コードブロックも挿入できるよ');</code></p>
+                    <blockquote>これは引用だよ。</blockquote>
+                    <p>画像も挿入できるよ：<img src="https://via.placeholder.com/150x100?text=Your+Image" alt="サンプル画像"></p>
+                </div>
+            </div>
+            <button class="generate-button" id="generateHtml">HTMLを生成！</button>
+
+            <div class="output-section">
+                <h2>生成されたHTMLコード</h2>
+                <pre class="generated-html" id="generatedHtmlOutput">
+                    </pre>
+                <button class="generate-button" id="copyHtml" style="margin-top: 15px;">コピーする</button>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2025 先生のブログ. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script src="loading.js"></script>
+    <script src="dark-mode.js"></script>
+    <script src="create-post.js"></script>
+</body>
+</html>

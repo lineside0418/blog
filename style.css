@@ -1,0 +1,871 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Roboto+Mono:wght@300;400;500&display=swap');
+
+/* --- 基本スタイル（ライトモードがデフォルト） --- */
+:root {
+    /* ライトモードの変数 */
+    --background-start: #a1c4fd; /* 淡い青 */
+    --background-end: #c2e9fb; /* 明るい水色 */
+    --text-color: #333;
+    --text-color-light: #555;
+    --text-color-lighter: #666;
+    --text-color-lightest: #888;
+    --glass-bg-opacity: 0.2;
+    --glass-border-opacity: 0.3;
+    --glass-shadow-opacity: 0.1;
+    --accent-color: #007bff; /* 青色 */
+    --header-hover-shadow-opacity: 0.15;
+    --profile-border-color: rgba(255, 255, 255, 0.7);
+    --list-item-bg-opacity: 0.3; /* About meのリスト項目用 */
+    --list-item-border-opacity: 0.35;
+    --list-item-shadow-opacity: 0.05;
+    --list-item-text-color: #444;
+    --footer-color: rgba(51, 51, 51, 0.7);
+    --toggle-button-filter: grayscale(100%); /* ライトモードではモノクロ */
+    --article-border-color: rgba(0, 0, 0, 0.1); /* 記事カードの枠線 */
+    --article-link-color: inherit; /* 記事リンクの色を親要素から継承 */
+
+    /* スムーズなテーマ切り替え用 */
+    --transition-duration: 0.3s;
+    --transition-timing-function: ease-in-out;
+    --hover-effect-duration: 0.2s; /* ホバーエフェクトの速度 */
+}
+
+/* --- ダークモードの変数 --- */
+body.dark-mode {
+    --background-start: #000; /* 完全な黒 */
+    --background-end: #333; /* 少し明るい黒 */
+    --text-color: #e0e0e0;
+    --text-color-light: #cccccc;
+    --text-color-lighter: #bbbbbb;
+    --text-color-lightest: #999999;
+    --glass-bg-opacity: 0.05; /* ダークモードでは透明度を下げてより黒く */
+    --glass-border-opacity: 0.1;
+    --glass-shadow-opacity: 0.3;
+    --accent-color: #89cff0; /* 明るい水色系に */
+    --header-hover-shadow-opacity: 0.4;
+    --profile-border-color: rgba(255, 255, 255, 0.3);
+    --list-item-bg-opacity: 0.1; /* About meのリスト項目用 */
+    --list-item-border-opacity: 0.15;
+    --list-item-shadow-opacity: 0.2;
+    --list-item-text-color: #ccc;
+    --footer-color: rgba(224, 224, 224, 0.7);
+    --toggle-button-filter: none; /* ダークモードではカラー */
+    --article-border-color: rgba(255, 255, 255, 0.1); /* ダークモードの記事カード枠線 */
+}
+
+body {
+    font-family: 'Noto Sans JP', sans-serif;
+    background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+    color: var(--text-color);
+    transition: background var(--transition-duration) var(--transition-timing-function), color var(--transition-duration) var(--transition-timing-function);
+}
+
+.container {
+    width: 95%;
+    max-width: 1000px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px; /* セクション間の余白を調整 */
+}
+
+/* --- グラスモーフィズム共通スタイル --- */
+.glass-effect {
+    background: rgba(255, 255, 255, var(--glass-bg-opacity));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 15px; /* 角丸を少し小さく */
+    border: 1px solid rgba(255, 255, 255, var(--glass-border-opacity));
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, var(--glass-shadow-opacity));
+    transition: background var(--transition-duration) var(--transition-timing-function), border var(--transition-duration) var(--transition-timing-function), box-shadow var(--transition-duration) var(--transition-timing-function), backdrop-filter var(--transition-duration) var(--transition-timing-function);
+}
+
+/* 各セクションへの適用 */
+header, .welcome-section, .latest-posts-section, .pickup-section, .latest-videos-section, .about-section, .notification-bar {
+    padding: 30px;
+    transition: all var(--transition-duration) var(--transition-timing-function);
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+}
+
+header:hover {
+    box-shadow: 0 10px 40px 0 rgba(0, 0, 0, var(--header-hover-shadow-opacity));
+}
+
+.logo {
+    font-size: 2em;
+    font-weight: 500;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: color var(--transition-duration) var(--transition-timing-function), transform var(--hover-effect-duration) ease-out; /* ホバーアニメーション追加 */
+}
+.logo:hover {
+    transform: scale(1.03); /* 少し拡大 */
+}
+
+nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    margin-left: 25px;
+    font-weight: 300;
+    transition: color var(--hover-effect-duration) ease-out, text-shadow var(--hover-effect-duration) ease-out, transform var(--hover-effect-duration) ease-out; /* ホバーアニメーション追加 */
+}
+
+nav a:hover {
+    color: var(--accent-color);
+    text-shadow: 0 0 8px rgba(0, 123, 255, 0.7); /* 影を強調 */
+    transform: translateY(-2px); /* 少し上に浮き上がる */
+}
+
+.theme-toggle-button {
+    background: none;
+    border: none;
+    font-size: 1.4em;
+    cursor: pointer;
+    color: var(--text-color);
+    margin-left: 20px;
+    transition: color var(--hover-effect-duration) ease-out, transform var(--hover-effect-duration) ease-out, filter var(--transition-duration) var(--transition-timing-function);
+    filter: var(--toggle-button-filter);
+    outline: none;
+}
+
+.theme-toggle-button:hover {
+    transform: scale(1.15); /* もっと大きく拡大 */
+    color: var(--accent-color);
+}
+
+.welcome-section {
+    text-align: center;
+    padding: 40px;
+}
+
+.welcome-section h1 {
+    font-size: 2.6em;
+    margin-bottom: 20px;
+    color: var(--text-color);
+    transition: color var(--transition-duration) var(--transition-timing-function);
+}
+
+.welcome-section p {
+    font-size: 1.15em;
+    color: var(--text-color-light);
+    line-height: 1.7;
+    transition: color var(--transition-duration) var(--transition-timing-function);
+}
+
+.section-title {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: var(--text-color);
+    text-align: left;
+    margin-bottom: 15px;
+    letter-spacing: 0.15em;
+    border-bottom: 2px solid var(--text-color-lightest); /* アクセントカラーではなく白（ライトモードでは明るいグレー）に変更 */
+    padding-bottom: 8px;
+    position: relative;
+    padding-left: 25px;
+    transition: all var(--transition-duration) var(--transition-timing-function);
+}
+
+/* ▷ の装飾を修正したよ！ */
+.section-title::before {
+    content: '▷';
+    position: absolute;
+    left: 0;
+    /* topとtransformを調整して、縦方向の中央揃えを完璧にするよ */
+    top: 50%; 
+    transform: translateY(-50%); /* これで▷の真ん中が文字の真ん中に合うはず！ */
+    color: var(--text-color); /* ▷ の色をテキストカラーに統一 */
+    font-size: 0.8em;
+    line-height: 1;
+    transition: color var(--transition-duration) var(--transition-timing-function);
+}
+
+.latest-posts-section:hover, .pickup-section:hover, .latest-videos-section:hover, .notification-bar:hover, .about-section:hover { /* 全ての主要セクションにホバーエフェクトを追加 */
+    box-shadow: 0 12px 48px 0 rgba(0, 0, 0, var(--header-hover-shadow-opacity)); /* 影をもう少し強調 */
+}
+
+/* --- 記事リストスタイル --- */
+.article-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.article-card {
+    border: 1px solid var(--article-border-color);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: border-color var(--transition-duration) var(--transition-timing-function), box-shadow var(--hover-effect-duration) ease-out, transform var(--hover-effect-duration) ease-out;
+}
+
+.article-card:hover {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, var(--header-hover-shadow-opacity));
+    transform: translateY(-5px);
+}
+
+.article-card a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--article-link-color);
+    padding: 15px;
+    position: relative; /* ::after と ::before の基準にするために必要 */
+    z-index: 1; /* コンテンツが手前に来るように */
+}
+
+/* ホバー時のオーバーレイ（読みたい感を出すよ！） */
+.article-card a::after {
+    content: 'READ MORE'; /* 基本のテキスト */
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    /* ライトモードの場合、背景を白、文字を黒にする */
+    background-color: rgba(255, 255, 255, 0.6); /* ライトモードでは白の半透明 */
+    color: #333; /* ライトモードでは黒文字 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.3em; /* 少し小さく */
+    font-weight: 300; /* 細めのフォントにしたよ！ */
+    font-family: 'Roboto Mono', monospace; /* おしゃれなフォントに */
+    opacity: 0;
+    transition: opacity 0.3s ease, background-color 0.3s ease, color 0.3s ease; /* colorもトランジション対象に */
+    pointer-events: none;
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border-radius: 10px;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.1); /* 黒文字なので影を黒に薄く */
+}
+
+/* ダークモード時のオーバーレイ */
+body.dark-mode .article-card a::after {
+    background-color: rgba(0, 0, 0, 0.6); /* ダークモードでは黒の半透明 */
+    color: #fff; /* ダークモードでは白文字 */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+.article-card:hover a::after {
+    opacity: 1;
+}
+
+/* 矢印のアニメーション */
+.article-card a::before { /* 矢印のための疑似要素 */
+    content: '→'; /* 矢印本体 */
+    position: absolute;
+    /* READ MORE テキストと矢印の間隔を調整して重なりを解消 */
+    left: calc(50% + (0.5em * 3) + 0.3em); /* 前回の位置からさらに右に0.3em移動 */
+    top: 50%;
+    transform: translate(0, -50%); /* 初期位置を調整して重なりを防ぐ */
+    opacity: 0; /* 初期は非表示 */
+    font-family: 'Noto Sans JP', sans-serif; /* 矢印は通常のフォントで */
+    font-size: 1.5em; /* 矢印のサイズ */
+    /* オーバーレイの文字色と合わせる */
+    color: #333; /* ライトモードでは黒文字 */
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out, color 0.3s ease; /* colorもトランジション対象に */
+    pointer-events: none;
+    z-index: 2; /* READ MORE より手前に */
+}
+
+/* ダークモード時の矢印の色 */
+body.dark-mode .article-card a::before {
+    color: #fff; /* ダークモードでは白文字 */
+}
+
+.article-card:hover a::before {
+    opacity: 1;
+    transform: translate(0.5em, -50%); /* ホバー時に矢印が少し右に動くように調整 */
+}
+
+/* ホバー時のコンテンツの色の変化も少し加える */
+.article-card:hover .article-content h3 {
+    color: var(--accent-color);
+}
+.article-card:hover .article-content p,
+.article-card:hover .article-meta {
+    color: var(--text-color);
+}
+
+/* 記事イメージのホバーエフェクト */
+.article-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-right: 15px;
+    background-color: var(--text-color-lightest); /* Placeholder background */
+    transition: transform var(--hover-effect-duration) ease-out;
+}
+.article-card:hover .article-image {
+    transform: scale(1.05); /* 少し拡大 */
+}
+
+.article-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.article-content {
+    flex-grow: 1;
+}
+
+.article-content h3 {
+    font-size: 1.2em;
+    margin-top: 0;
+    margin-bottom: 5px;
+    color: var(--text-color);
+    transition: color 0.3s ease;
+}
+
+.article-content p {
+    font-size: 0.95em;
+    color: var(--text-color-lighter);
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.article-meta {
+    font-size: 0.8em;
+    color: var(--text-color-lightest);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.article-meta .date {
+    /* デフォルトで左寄せ */
+}
+
+.article-meta .read-time {
+    /* デフォルトで右寄せ */
+}
+
+/* PickupセクションはLatest Postsと同じスタイル */
+.pickup-section .section-title {
+    text-align: left;
+}
+
+.latest-videos-section {
+    padding: 30px;
+}
+
+.latest-videos-section h2 {
+    /* .section-title クラスを適用するので、h2単体でのスタイルは不要、または上書きされます */
+    /* font-size: 2em; */
+    /* margin-bottom: 20px; */
+    /* color: var(--text-color); */
+    /* text-align: left; */
+}
+
+.video-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.video-card {
+    background: rgba(255, 255, 255, var(--glass-bg-opacity));
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, var(--glass-border-opacity));
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, var(--glass-shadow-opacity));
+    padding: 20px;
+    transition: transform var(--hover-effect-duration) ease-out, box-shadow var(--hover-effect-duration) ease-out, background var(--transition-duration) var(--transition-timing-function), border var(--transition-duration) var(--transition-timing-function), backdrop-filter var(--transition-duration) var(--transition-timing-function);
+}
+
+.video-card:hover {
+    transform: translateY(-7px); /* 少しだけ浮き上がる量を増やす */
+    box-shadow: 0 12px 35px 0 rgba(0, 0, 0, var(--header-hover-shadow-opacity)); /* 影を強調 */
+}
+
+/* 動画iframeのホバーエフェクト */
+.video-card iframe {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform var(--hover-effect-duration) ease-out, box-shadow var(--hover-effect-duration) ease-out;
+}
+.video-card:hover iframe {
+    transform: scale(1.02); /* 少し拡大 */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* 影を強調 */
+}
+
+.video-card h3 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    color: var(--text-color);
+    transition: color var(--transition-duration) var(--transition-timing-function);
+}
+
+.video-card p {
+    font-size: 0.9em;
+    color: var(--text-color-lighter);
+    line-height: 1.4;
+    margin-bottom: 10px; /* 日付欄との間に余白 */
+    transition: color var(--transition-duration) var(--transition-timing-function);
+}
+
+/* 動画の日付表示用スタイル */
+.video-meta {
+    font-size: 0.8em;
+    color: var(--text-color-lightest);
+    text-align: right; /* 日付を右寄せに */
+}
+
+/* --- 通知欄 --- */
+.notification-bar {
+    padding: 30px; /* 他のセクションと同じパディングにするよ */
+}
+
+/* Notificationのリストスタイル */
+.notification-list {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.notification-item {
+    display: flex;
+    justify-content: space-between; /* 日付とテキストを左右に配置 */
+    align-items: center; /* 垂直方向の中央揃え */
+    padding: 8px 0; /* リストの項目ごとのパディング */
+    border-bottom: 1px dashed var(--text-color-lightest); /* 点線の下線 */
+    font-size: 0.9em;
+    color: var(--text-color-lighter);
+    transition: color var(--transition-duration) var(--transition-timing-function), transform var(--hover-effect-duration) ease-out;
+}
+
+.notification-item:last-child {
+    border-bottom: none; /* 最後の項目は下線なし */
+}
+
+.notification-item:hover {
+    transform: translateX(5px); /* 少し右にスライド */
+    color: var(--accent-color); /* 色も少し変わる */
+}
+
+.notification-item .notification-text {
+    flex-grow: 1; /* テキストが利用可能なスペースを埋める */
+    padding-right: 15px; /* 日付との間にスペース */
+}
+
+.notification-item .notification-date {
+    font-size: 0.8em;
+    color: var(--text-color-lightest);
+    white-space: nowrap; /* 日付が改行されないように */
+}
+
+
+/* About me ページ固有のスタイル */
+.profile-image {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 20px;
+    border: 3px solid var(--profile-border-color);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform var(--hover-effect-duration) ease-out, border-color var(--transition-duration) var(--transition-timing-function), box-shadow var(--hover-effect-duration) ease-out;
+}
+
+.profile-image:hover {
+    transform: scale(1.08); /* もっと大きく拡大 */
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.about-section h1 {
+    font-size: 2.4em;
+    margin-bottom: 15px;
+    color: var(--text-color);
+    text-align: left;
+}
+
+.about-section h3 {
+    font-size: 1.6em;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    color: var(--text-color);
+    text-align: left;
+}
+
+.about-section p {
+    text-align: left;
+    line-height: 1.7;
+    margin-bottom: 15px;
+    color: var(--text-color-light);
+    font-size: 1em;
+    transition: color var(--transition-duration) var(--transition-timing-function);
+}
+
+.about-section ul {
+    list-style: disc;
+    padding-left: 20px;
+    text-align: left;
+    margin-top: 15px;
+}
+
+.about-section ul li {
+    margin-bottom: 10px;
+    color: var(--text-color-light);
+    font-size: 1em;
+    transition: color var(--transition-duration) var(--transition-timing-function), transform var(--hover-effect-duration) ease-out;
+}
+.about-section ul li:hover {
+    transform: translateX(3px); /* 少し右にスライド */
+    color: var(--accent-color); /* 色も少し変わる */
+}
+
+footer {
+    margin-top: 40px;
+    padding: 20px;
+    text-align: center;
+    color: var(--footer-color);
+    font-size: 0.85em;
+    transition: color var(--transition-duration) var(--transition-timing-function), transform var(--hover-effect-duration) ease-out;
+}
+footer:hover {
+    transform: translateY(-2px); /* 少し浮き上がる */
+}
+
+/* --- ローディングスクリーン CSS --- */
+#loading-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--background-start) 0%, var(--background-end) 100%);
+    display: flex;
+    flex-direction: column; /* 要素を縦に並べるために追加 */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity var(--transition-duration) var(--transition-timing-function), visibility var(--transition-duration) var(--transition-timing-function), background var(--transition-duration) var(--transition-timing-function);
+}
+
+#loading-screen.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(255, 255, 255, 0.3);
+    border-top-color: var(--accent-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    transition: border-top-color var(--transition-duration) var(--transition-timing-function);
+    margin-bottom: 20px; /* 文字との間に余白 */
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ローディングテキストのスタイル */
+#loading-text {
+    font-family: 'Roboto Mono', monospace; /* モダンなフォントに */
+    font-size: 1.5em; /* フォントサイズ */
+    font-style: italic; /* 斜体にする */
+    color: #fff; /* テキストカラー */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3); /* 地味な装飾 */
+    display: flex; /* 各文字を横並びにするためにflexboxを使う */
+    justify-content: center; /* 中央寄せ */
+    align-items: center; /* 縦方向の中央寄せ */
+}
+
+/* Loading...の各文字を囲む span に適用するスタイル */
+#loading-text span {
+    display: inline-block; /* アニメーションのために必須 */
+    opacity: 0; /* 初期は非表示 */
+    transform: translateY(0); /* 初期位置 */
+    animation: floatAndShift 2s infinite ease-in-out forwards; /* 新しいアニメーション適用 */
+    margin: 0 1px; /* 文字間の微調整 */
+}
+
+@keyframes floatAndShift {
+    0% { /* 登場時はopacity: 0から始まる */
+        opacity: 0;
+        transform: translateY(0px);
+    }
+    10% { /* 短時間でフェードイン */
+        opacity: 1;
+        transform: translateY(0px);
+    }
+    25% {
+        opacity: 1;
+        transform: translateY(-3px); /* 少し上に浮き上がる */
+    }
+    75% {
+        opacity: 1;
+        transform: translateY(3px); /* 少し下に沈む */
+    }
+    100% {
+        opacity: 0.7; /* 最後は少し透明に */
+        transform: translateY(0px);
+    }
+}
+
+/* --- ダークモード切り替え時のフェードオーバーレイ --- */
+#theme-transition-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0); /* 初期は透明 */
+    z-index: 9998; /* ローディングスクリーンより下 */
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8em; /* 文言のフォントサイズを少し大きく */
+    font-family: 'Roboto Mono', monospace; /* モダンなフォントに */
+    font-style: italic; /* 斜体にする */
+    color: #fff; /* 切り替え中の文字色は常に白にする */
+    transition: opacity 0.2s ease-in-out, visibility 0.2s ease-in-out, background-color var(--transition-duration) var(--transition-timing-function);
+    /* 地味な装飾: text-shadow で少し影をつける */
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
+}
+
+#theme-transition-overlay.active {
+    /* activeクラスが追加されたときにJavaScriptでbackgroundColorを設定するので、ここでは透明のままでOK */
+    opacity: 1;
+    visibility: visible;
+}
+
+/* 「Loading theme...」の各文字を囲む span に適用するスタイル */
+#theme-transition-overlay span {
+    display: inline-block; /* 文字ごとにアニメーションさせるために必要 */
+    opacity: 0; /* 初期状態では非表示 */
+    transform: translateY(5px); /* 初期状態では少し下に移動 */
+    animation: letter-fade-in 0.8s ease-out forwards; /* アニメーション適用 */
+    /* 地味な装飾: text-shadow を個別の文字にも設定 */
+    text-shadow: 0 0 3px rgba(255, 255, 255, 0.2);
+}
+
+@keyframes letter-fade-in {
+    0% {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+    .container {
+        width: 98%;
+        padding: 10px; /* 小さな画面ではコンテナのパディングを減らす */
+    }
+    header {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px 20px;
+    }
+    nav {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    nav a {
+        margin: 0 8px;
+        margin-bottom: 5px;
+        font-size: 0.9em;
+    }
+    .theme-toggle-button {
+        margin-top: 10px;
+        margin-left: 0;
+    }
+    .welcome-section {
+        padding: 30px;
+    }
+    .welcome-section h1 {
+        font-size: 2em;
+    }
+    .welcome-section p {
+        font-size: 1em;
+    }
+    .section-title {
+        font-size: 1em; /* スマホでは少し小さく */
+        padding-left: 20px; /* ▷ のスペース調整 */
+    }
+
+    .section-title::before {
+        font-size: 0.7em; /* スマホでは ▷ も小さく */
+    }
+    /* スマホではREAD MOREのオーバーレイ全体を無効化 */
+    .article-card a::after {
+        content: none; /* オーバーレイのコンテンツをなくす */
+        opacity: 0; /* 透明にする */
+        visibility: hidden; /* 非表示にする */
+    }
+    .article-card a::before {
+        content: none; /* 矢印も非表示 */
+    }
+    .article-card:hover a::after {
+        opacity: 0; /* ホバーしても変化なし */
+    }
+    .article-card:hover a::before {
+        opacity: 0; /* ホバーしても変化なし */
+    }
+
+    .article-card a {
+        /* スマホでオーバーレイがなくなるので、記事カードリンク自体のスタイルを調整 */
+        padding: 10px; /* パディングを調整 */
+        display: flex; /* Flexboxを維持 */
+        flex-direction: column; /* 縦並びに変更 */
+        align-items: flex-start; /* 左寄せ */
+        text-align: left; /* テキストも左寄せ */
+    }
+
+    .article-image {
+        width: 60px;
+        height: 60px;
+        margin-right: 0; /* 画像の右マージンをなくす */
+        margin-bottom: 10px; /* 画像の下に余白 */
+    }
+    .article-content h3 {
+        font-size: 1.1em;
+    }
+    .article-content p {
+        font-size: 0.85em;
+    }
+    .article-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%; /* 日付と読了時間を縦に並べるため */
+    }
+    .article-meta .read-time {
+        margin-top: 3px; /* 日付と読了時間の間隔 */
+    }
+    /* ホバーアニメーションはスマホでは無効化（タップで開くため） */
+    .article-card:hover {
+        transform: none; /* スマホでは浮き上がりなし */
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* 影は残す */
+    }
+    /* ホバー時のテキスト色の変化もスマホでは無効化するか、別のトリガーを設定 */
+    .article-card:hover .article-content h3,
+    .article-card:hover .article-content p,
+    .article-card:hover .article-meta {
+        color: inherit; /* デフォルトの色に戻す */
+    }
+    .latest-videos-section h2 {
+        /* section-titleクラスが適用されるので、ここでの個別のスタイルは不要になるか、上書きされるべき */
+        /* font-size: 1.8em; */
+        /* text-align: center; */
+    }
+    .video-grid {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    .video-card {
+        padding: 15px;
+    }
+    .video-card h3 {
+        font-size: 1em;
+    }
+    .video-card p {
+        font-size: 0.85em;
+    }
+    .video-meta { /* レスポンシブの日付スタイル */
+        text-align: left; /* スマホ表示では左寄せに */
+        margin-top: 5px; /* 上との余白 */
+    }
+    .notification-bar {
+        padding: 25px; /* スマホでのパディング調整 */
+    }
+
+    .notification-item {
+        flex-direction: column; /* スマホでは縦並び */
+        align-items: flex-start; /* 左寄せ */
+        padding: 10px 0;
+        font-size: 0.85em;
+    }
+    
+    .notification-item .notification-text {
+        padding-right: 0; /* スマホでは右パディング不要 */
+        margin-bottom: 5px; /* テキストと日付の間に余白 */
+    }
+
+    .notification-item .notification-date {
+        text-align: left; /* スマホでは左寄せ */
+        width: 100%; /* 幅を100%にして改行を防ぐ */
+    }
+    /* スマホでは主要セクションのホバーエフェクトを無効化 */
+    .latest-posts-section:hover, .pickup-section:hover, .latest-videos-section:hover, .notification-bar:hover, .about-section:hover {
+        box-shadow: none; /* 影をなしに */
+    }
+    .notification-item:hover {
+        transform: none; /* スマホではスライドなし */
+        color: var(--text-color-lighter); /* 色も変化なし */
+    }
+    .about-section {
+        padding: 25px;
+    }
+    .about-section h1 {
+        font-size: 2em;
+    }
+    .about-section h3 {
+        font-size: 1.4em;
+    }
+    .about-section p, .about-section ul li {
+        font-size: 0.9em;
+    }
+    .about-section ul li:hover {
+        transform: none; /* スマホではスライドなし */
+        color: var(--text-color-light); /* 色も変化なし */
+    }
+    footer {
+        margin-top: 30px;
+        padding: 15px;
+        font-size: 0.8em;
+    }
+    footer:hover {
+        transform: none; /* スマホでは浮き上がりなし */
+    }
+    .video-card:hover {
+        transform: none;
+        box-shadow: 0 6px 20px 0 rgba(0, 0, 0, var(--glass-shadow-opacity)); /* デフォルトの影 */
+    }
+    .video-card:hover iframe {
+        transform: none;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .profile-image:hover {
+        transform: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+}

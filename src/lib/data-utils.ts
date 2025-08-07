@@ -120,6 +120,12 @@ export async function getRecentPosts(
   return posts.slice(0, count)
 }
 
+export async function getPickupPosts(): Promise<CollectionEntry<'blog'>[]> {
+  const posts = await getCollection('blog')
+  return posts.filter((post) => post.data.featured && !post.data.draft)
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+}
+
 export async function getSortedTags(): Promise<
   { tag: string; count: number }[]
 > {

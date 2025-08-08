@@ -10,9 +10,12 @@ import { getRecentPosts, getPickupPosts } from '@/lib/data-utils'
 const blog = await getRecentPosts(SITE.featuredPostCount)
 const pickupPosts = await getPickupPosts()
 
+// ここに表示したいYouTubeの動画IDを追加するんだよ！
+const videoIds = ['YOUR_VIDEO_ID_1', 'YOUR_VIDEO_ID_2', 'YOUR_VIDEO_ID_3']
+
 ---
 
-<Layout class="max-w-3xl">
+<Layout class="max-w-4xl">
   <section class="mb-8">
     <div class="rounded-lg border">
       <div class="flex flex-col space-y-1.5 p-6">
@@ -30,9 +33,12 @@ const pickupPosts = await getPickupPosts()
   </section>
 
   {
-    pickupPosts.length > 0 && (
+    pickupPosts.length > 0 ? (
       <section class="flex flex-col gap-y-4 mb-8">
-        <h2 class="text-2xl font-medium">Pick Up Posts</h2>
+        <h2 class="text-2xl font-medium flex items-center whitespace-nowrap">
+          Pick Up Posts
+          <div class="h-px w-full bg-gray-300 ml-4"></div>
+        </h2>
         <ul class="flex flex-col gap-y-4">
           {pickupPosts.map((post) => (
             <li>
@@ -41,11 +47,22 @@ const pickupPosts = await getPickupPosts()
           ))}
         </ul>
       </section>
+    ) : (
+      <section class="flex flex-col gap-y-4 mb-8">
+        <h2 class="text-2xl font-medium flex items-center whitespace-nowrap">
+          Pick Up Posts
+          <div class="h-px w-full bg-gray-300 ml-4"></div>
+        </h2>
+        <p class="text-muted-foreground">現在ピックアップ記事はありません。</p>
+      </section>
     )
   }
 
   <section class="flex flex-col gap-y-4 mb-8">
-    <h2 class="text-2xl font-medium">Recent Posts</h2>
+    <h2 class="text-2xl font-medium flex items-center whitespace-nowrap">
+      Recent Posts
+      <div class="h-px w-full bg-gray-300 ml-4"></div>
+    </h2>
     <ul class="flex flex-col gap-y-4">
       {
         blog.map((post) => (
@@ -69,15 +86,22 @@ const pickupPosts = await getPickupPosts()
   </section>
 
   <section class="flex flex-col gap-y-4 mb-8">
-    <h2 class="text-2xl font-medium">Videos</h2>
-    <div class="aspect-video">
-      <iframe
-        class="w-full h-full rounded-lg"
-        src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-        title="YouTube video player"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-      ></iframe>
+    <h2 class="text-2xl font-medium flex items-center whitespace-nowrap">
+      Videos
+      <div class="h-px w-full bg-gray-300 ml-4"></div>
+    </h2>
+    <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {videoIds.map((id) => (
+        <div class="aspect-video">
+          <iframe
+            class="w-full h-full rounded-lg"
+            src={`https://www.youtube.com/embed/${id}`}
+            title="YouTube video player"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+          ></iframe>
+        </div>
+      ))}
     </div>
   </section>
 </Layout>

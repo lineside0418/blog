@@ -1,0 +1,197 @@
+---
+title: 'Astro-Eruditeでブログを構築してみよう'
+featured: true
+description: 'Astro-Eruditeで個人ブログを構築の仕方を解説しています。'
+date: 2025-08-10
+tags: ['Astro','ブログ']
+authors: ['lineside']
+draft: false
+---
+
+## はじめに
+今回は、AstroとAstro-Eruditeテーマを用いて、個人ブログを構築するやり方を簡単に解説していきます。
+
+## 前提条件
+- Node.jsが端末にインストールされていること
+- Gitが端末にインストールされていること
+
+次のセクションから、実際に構築していきます。  
+基本的には[Astro-Erudite](https://github.com/jktrn/astro-erudite)のGuideに従っていく感じになります。
+
+## プロジェクトの構築
+### テンプレートをコピー
+[Astro-Erudite](https://github.com/jktrn/astro-erudite)にアクセスし、右上の**Use this template**をクリックし、Create a New Repositoryを選択します。  
+遷移した画面でリポジトリ名を決めて、リポジトリを作成します。
+
+### 作業環境を構築
+プロジェクトを置く場所を決めたら、
+```bash
+git clone https://github.com/{YourName}/{RepositoryName}
+```
+でクローンし、
+```bash
+cd {RepositoryName}
+npm install
+```
+で依存関係をすべてインストールします。
+
+### 開発サーバーの起動
+```bash
+npm run dev
+```
+で開発サーバーを起動します。
+デフォルトでは、ブラウザで`http://localhost:1234`でアクセスできます。  
+Astro-Eruditeのホームページが表示されていれば、環境構築は成功です。
+
+## ブログのカスタマイズ
+### ページ
+基本的に、`/src/pages/`に置いてある
+- `index.astro`
+- `about.astro`
+- `404.astro`
+- `authors/index.astro`
+- `blog/index.astro`
+- `tags/index.astro`
+
+を編集することで、ブログ内のページのデザインや機能をカスタマイズをすることが出来ます。
+
+ヘッダーやフッターなどのコンポーネントに関しては、`src/components`内のファイル
+- ヘッダー：`src/components/Header.astro`
+- フッター：`src/components/Footer.astro`
+- ブログカード；`src/components/BlogCard.astro`
+
+を編集することで変更できます。(ヘッダーはデザインのみ)
+
+### サイトの設定
+`src/consts.ts`を編集することで、サイトの設定とヘッダーナビゲーションやフッターのリンクのカスタマイズをすることが出来ます。
+```typescript
+import type { IconMap, SocialLink, Site } from '@/types'
+
+export const SITE: Site = {
+  title: 'astro-erudite', //サイトのタイトル
+  description:
+    'astro-erudite is a opinionated, unstyled blogging template—built with Astro, Tailwind, and shadcn/ui.', //サイトの説明
+  href: 'https://astro-erudite.vercel.app', //サイト公開時のURL
+  author: 'jktrn', //作者名
+  locale: 'en-US', //言語(ja-JPなど)
+  featuredPostCount: 2, //最初のページに表示する記事の数
+  postsPerPage: 3, //1ページに表示する記事の数
+}
+
+export const NAV_LINKS: SocialLink[] = [ //ヘッダーナビゲーションのリンク
+  {
+    href: '/blog',
+    label: 'blog',
+  },
+  {
+    href: '/authors',
+    label: 'authors',
+  },
+  {
+    href: '/about',
+    label: 'about',
+  },
+]
+
+export const SOCIAL_LINKS: SocialLink[] = [ //フッターのソーシャルリンク
+  {
+    href: 'https://github.com/jktrn',
+    label: 'GitHub',
+  },
+  {
+    href: 'https://twitter.com/enscry',
+    label: 'Twitter',
+  },
+  {
+    href: 'mailto:jason@enscribe.dev',
+    label: 'Email',
+  },
+  {
+    href: '/rss.xml',
+    label: 'RSS',
+  },
+]
+
+export const ICON_MAP: IconMap = { //アイコンのマッピング(設定)
+  Website: 'lucide:globe',
+  GitHub: 'lucide:github',
+  LinkedIn: 'lucide:linkedin',
+  Twitter: 'lucide:twitter',
+  Email: 'lucide:mail',
+  RSS: 'lucide:rss',
+}
+```
+のような感じで設定します。
+
+### ファビコンの設定
+基本的に`public`フォルダ内にあるファイルを自分で用意した画像に置き換えてください。  
+位置を変えたりしたい場合は、`src/components/Favicons.astro`を編集することで変更できます。
+
+## コンテンツの追加
+### ブログ記事
+ブログ記事は基本的に`src/content/blog`の中にmdx、またはmd形式で保存します。
+```markdown
+---
+title: '{記事のタイトル}'
+description: '{記事の簡単な説明}'
+date: {日時(yyyy-mm-dd)}
+tags: [{tag1}, {tag2}]
+authors: ['{YourName}']
+draft: false //下書きかどうか
+---
+```
+を最初につけるのを忘れずに。
+
+### 他のコンテンツ
+他にも`authors`や`projects`などのコンテンツをデフォルトで追加できるようになっていますが、私自身使っていないためわかりません...。  
+このあと使うところが出てきて理解したら更新しようかと思います。気になる方は各自調べてみてください。
+
+## vercelへのデプロイ
+### デプロイにあたって
+今回はvercelというホスティングサービスを使ってブログをデプロイします。  
+自分でサーバーを持っていたり、他のサービスで契約している人は各自それぞれのやり方でデプロイしていただければと思います。
+
+### プロジェクトでの設定
+```bash
+npm run dev
+```
+を実行してエラーがないか確認し、エラーがなければ
+```bash
+git add .
+git commit -m "{commit message}"
+git push origin main
+```
+でリモートリポジトリに変更をプッシュして保存してください。
+次に、vercelでデプロイするために、
+```bash
+npx astro add vercel
+```
+でSSRを有効にし、vercelへデプロイするための準備をします。
+基本的に聞かれる項目にはyを連打しておけば問題ないです。
+
+### アカウント作成
+vercelでの設定に移ります。
+vercelのアカウントを持っていない場合は、[vercel](https://vercel.com/new)にアクセスし、画面左中央の**GitHubアカウント**で連携してください。  
+もうアカウントを持っていてログイン済みの方は次へ。
+
+### プロジェクトの選択
+GitHubアカウントと連携するとGitHubのリポジトリを勝手に読み込んでくれるので、先ほどのリポジトリを選択してインポートします。  
+サイトのURL(`consts.ts`で設定したURLと同じになるようにしてください)を設定し、他の設定は基本的にそのままでOKです。  
+出来たらDeployボタンを押してプロジェクトをvercelにデプロイします。これで基本的なブログの構築は完了です。お疲れ様でした！
+
+### コンテンツの追加について
+デプロイ後は、記事を追加するなどしたあとにmainブランチにプッシュするだけで自動的にvercelがデプロイしてくれます。  
+Markdown形式の記法に関しては[こちらのサイト](https://qiita.com/Qiita/items/c686397e4a0f4f11683d#code-spans---%E3%82%B3%E3%83%BC%E3%83%89%E3%82%B9%E3%83%91%E3%83%B3)を参考にしました。わかりやすかったので。
+
+## まとめ
+以上でAstro-Eruditeのブログの構築は終了です。  
+基本的なものは出来上がっているし、Erudite自体かなり完成されたテーマなのもあってかなり簡単にブログを構築できたと思います。  
+あとは、ブログの細部のデザインを凝ったり、記事を投稿したり等、やることは尽きませんが。  
+これを機に色々とテーマを探してみるのもいいかもしれませんね。(当分やらないとは思いますが)  
+それでは今回はこのへんで。また次回！
+
+## References
+- [Astro-Erudite](https://github.com/jktrn/astro-erudite)
+- [Vercel](https://vercel.com/)
+- [Markdown記法 チートシート](https://qiita.com/Qiita/items/c686397e4a0f4f11683d#code-spans---%E3%82%B3%E3%83%BC%E3%83%89%E3%82%B9%E3%83%91%E3%83%B3)
+- [AstroサイトをVercelにデプロイする](https://docs.astro.build/ja/guides/deploy/vercel/)

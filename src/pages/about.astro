@@ -2,45 +2,75 @@
 import Breadcrumbs from '@/components/Breadcrumbs.astro'
 import Link from '@/components/Link.astro'
 import PageHead from '@/components/PageHead.astro'
-import ProjectCard from '@/components/ProjectCard.astro'
+import { buttonVariants } from '@/components/ui/button'
 import Layout from '@/layouts/Layout.astro'
-import { getAllProjects } from '@/lib/data-utils'
+import { Icon } from 'astro-icon/components'
+import { Image } from 'astro:assets'
 
-const projects = await getAllProjects()
+// 先生のプロフィール情報をここに設定してね！
+const author = {
+  name: 'lineside', // 先生の名前
+  avatar: '/images/lineside.png', // アイコン画像のパス
+  bio: 'ゲームとプログラミングが好きな高校生。', // 自己紹介文
+};
+
+// SNSの情報を追加！
+const socialLinks = [
+  { name: 'X', icon: 'lucide:twitter', href: 'https://twitter.com/_lineside_' },
+  { name: 'GitHub', icon: 'lucide:github', href: 'https://github.com/lineside0418' },
+  { name: 'YouTube', icon: 'lucide:youtube', href: 'https://youtube.com/@side-channel' },
+];
+
 ---
 
-<Layout class="max-w-4xl">
-  <PageHead slot="head" title="About" />
-  <Breadcrumbs items={[{ label: 'About', icon: 'lucide:info' }]} />
-
-  <section>
-    <div class="min-w-full">
-      <div class="prose mb-8">
-        <p class="mt-0">
-          astro-erudite is an opinionated, unstyled static blogging template
-          that prioritizes simplicity and performance, built with <Link
-            href="https://astro.build"
-            external
-            underline>Astro</Link
-          >, <Link href="https://tailwindcss.com" external underline
-            >Tailwind</Link
-          >, and <Link href="https://ui.shadcn.com" external underline
-            >shadcn/ui</Link
-          >. It provides a clean foundation for your content while being
-          extremely easy to customize.
+<Layout class="max-w-5xl mx-auto px-4">
+  <PageHead slot="head" title="About lineside" />
+  <section class="relative py-16 md:py-24 overflow-hidden">
+    <div class="grid md:grid-cols-3 gap-12 items-center">
+      {/* プロフィールセクション (左側) */}
+      <div class="md:col-span-1 flex flex-col items-center md:items-start text-center md:text-left relative">
+        {
+          author.avatar && (
+            <Image
+              src={author.avatar}
+              alt={author.name}
+              width={160}
+              height={160}
+              class="rounded-full object-cover border-4 border-primary/50 shadow-lg mb-6"
+            />
+          )
+        }
+        <h1 class="text-4xl md:text-5xl font-bold tracking-tight mb-2">{author.name}</h1>
+        {author.bio && <p class="text-muted-foreground text-lg mb-4">{author.bio}</p>}
+        
+        {/* SNSリンクセクション */}
+        <div class="flex gap-4 mt-4">
+          {socialLinks.map((link) => (
+            <Link
+              href={link.href}
+              class={buttonVariants({ variant: 'outline', size: 'icon' })}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon name={link.icon} class="h-5 w-5" />
+              <span class="sr-only">{link.name}</span>
+            </Link>
+          ))}
+        </div>
+      </div>
+      
+      {/* 自己紹介文 (右側) */}
+      <div class="md:col-span-2 prose dark:prose-invert mt-8 md:mt-0 max-w-none">
+        <p>
+          多趣味で器用貧乏な高校生です。最近は鳴潮やゼンゼロにハマっています。<br>
+          MinecraftではデータパックでRPGを制作中。完成予定は未定。<br>
+          このサイトは日常でなにか感じたことや、技術的なことや開発進捗等、様々なことを上げていくつもりなので、暇なときにでも読んでいただけるようなブログを目指します。
         </p>
         <p>
-          To learn more about the philosophy behind this template, check out the
-          following blog post: <Link
-            href="/blog/the-state-of-static-blogs"
-            underline>The State of Static Blogs in 2024</Link
-          >.
+          このサイトは、シンプルさとパフォーマンスを重視して、<strong>Astro-Erudite</strong>というテンプレートを基盤に構築されています。<br>
+          ミニマルなデザインとアニメーションがやっぱりかっこいいですよね。自分は大好きです、こういうの。
+          これからも少しずつ進化していく予定です。多分。
         </p>
-      </div>
-
-      <h2 class="mb-4 text-2xl font-medium">Example Projects Listing</h2>
-      <div class="flex flex-col gap-4">
-        {projects.map((project) => <ProjectCard project={project} />)}
       </div>
     </div>
   </section>

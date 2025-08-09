@@ -1,0 +1,42 @@
+---
+import BlogCard from '@/components/BlogCard.astro'
+import Breadcrumbs from '@/components/Breadcrumbs.astro'
+import PageHead from '@/components/PageHead.astro'
+import Layout from '@/layouts/Layout.astro'
+import { getPostsByTag } from '@/lib/data-utils'
+
+const posts = await getPostsByTag('project')
+---
+
+<Layout class="max-w-4xl">
+  <PageHead
+    slot="head"
+    title="Projects"
+    description="現在進行中、または完了したプロジェクトの一覧です。"
+  />
+  <Breadcrumbs
+    items={[
+      { href: '/project', label: 'Projects', icon: 'lucide:rocket' },
+    ]}
+  />
+
+  <h1 class="text-4xl font-bold tracking-tight mb-8">
+    Projects
+    <span class="text-xl text-muted-foreground ml-4">{posts.length} Projects</span>
+  </h1>
+
+  {posts.length > 0 ? (
+    <ul class="flex flex-col gap-y-4">
+      {posts.map((post) => (
+        <li>
+          <BlogCard entry={post} />
+        </li>
+      ))}
+    </ul>
+  ) : (
+    <div class="text-center text-muted-foreground mt-16">
+      <p class="text-xl">現在、進行中のプロジェクトはありません。</p>
+      <p class="text-sm">No projects currently in progress.</p>
+    </div>
+  )}
+</Layout>

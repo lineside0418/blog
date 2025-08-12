@@ -92,3 +92,21 @@
     @apply border-border outline-ring/50 tracking-tight;
   }
 }
+
+html[data-theme="light"] {
+  --background: oklch(0.985 0.01 70); /* 既存の背景色 */
+  background-color: var(--background);
+  background-image:
+    linear-gradient(to right, rgba(240, 240, 240, 0.397) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(240, 240, 240, 0.397) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+}
+
+html[data-theme="dark"] {
+  --background-dark: oklch(20.019% 0.00002 271.152); /* 既存のダーク背景色 */
+  background-color: var(--background-dark);
+  background-image:
+    linear-gradient(to right, rgba(34, 34, 34, 0.397) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(34, 34, 34, 0.397) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+}

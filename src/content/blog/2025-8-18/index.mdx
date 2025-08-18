@@ -1,0 +1,177 @@
+---
+title: 'Minecraft v1.20.1 Fabricで音ブロック環境構築'
+featured: true
+description: '音ブロック用の環境構築の際に導入したMODの解説と備忘録を兼ねて。'
+date: 2025-08-18
+tags: ['Minecraft','音ブロック','環境構築']
+authors: ['lineside']
+draft: false
+---
+
+## はじめに
+今回はMinecraft JavaEdition v1.20.1 Fabricで音ブロック用の環境を構築したので、  
+その際に使用したMODやデータパック、備忘録等です。
+
+## なぜ1.20.1なのか
+実は1.20.4でも良かったんですが、個人的に以前作っていたワールドとの互換性を優先(というか変換がめんどくさい)して1.20.1にしました。  
+後述のいくつかのMODで最新バージョンが1.20.4までなので、参考にされる方はこのブログ執筆時点では1.20.4まででおすすめします。
+
+## 使用MOD
+
+### 軽量化系
+軽量化系統のMODについてです。
+
+- [Sodium](https://modrinth.com/mod/sodium)  
+言わずとしれた超有名軽量化MOD。  
+シェーダーを入れるためのIrisなどのModの前提MODなどにもなっている。  
+描画関係の処理を最適化し、FPSの改善を図るMOD。
+
+- [Sodium Extra](https://modrinth.com/mod/sodium-extra)  
+先述のSodiumの機能拡張用MOD。  
+エンティティや他のより細かい描画設定を可能にするMOD。
+
+- [Reese's Sodium Options](https://modrinth.com/mod/reeses-sodium-options)  
+Sodiumの設定画面を整えるためのMOD。  
+他のMODを入れると直接アクセスできるようになったりもする。(ex.Iris)
+
+- [LazyDFU](https://modrinth.com/mod/lazydfu)  
+DFUという仕組みの起動を必要なときのみに制限することで、起動時間やメモリ負荷の削減をするMOD。
+
+- [Client Side Noteblocks](https://modrinth.com/mod/clientsidenoteblocks)  
+クライアント側で即座に音を再生することで、ラグい環境でも音ブロックのラグをかなり軽減できるMOD。  
+サーバーサイド、クライアントサイドどちらでも動作可能。
+
+- [Alternate Current](https://modrinth.com/mod/alternate-current)  
+レッドストーン周りの処理を最適化&軽量化し、ラグを軽減するMOD。
+
+- [Dash Loader](https://modrinth.com/mod/dashloader)  
+初回起動時にキャッシュを作成し、次回以降はそのキャッシュを使用することで起動時間を大幅に削減するMOD。
+
+- [Dynamic FPS](https://modrinth.com/mod/dynamic-fps)  
+ウィンドウがアイドル状態であったり、バックグラウンドで動作している場合、フレームレート等を低下させて使用リソースを削減するMOD。
+
+- [Entity Culling](https://modrinth.com/mod/entityculling)  
+プレイヤーから見えていないエンティティの描画をスキップすることで処理を削減するMOD。
+
+- [FastQuit](https://modrinth.com/mod/fastquit)  
+ワールドを閉じたときの保存処理をバックグラウンドで行うことで、即座にメインメニューに戻れるようになるMOD。
+
+- [FPS Reducer](https://modrinth.com/mod/fps-reducer)  
+先述のDynamic FPSと機能はほぼ同じ。設定が少し柔軟に行える。
+
+- [ImmediatelyFast](https://modrinth.com/mod/immediatelyfast)  
+エンティティやパーティクル、GUIなどの描画処理をカスタムバッファにより効率化するMOD。
+
+- [Indium](https://modrinth.com/mod/indium)  
+sodiumで行われない最適化処理を追加&補助するMOD。
+
+- [Language Reload](https://modrinth.com/mod/language-reload)  
+言語切替時のロードを爆速にしてくれるMOD。
+
+- [Lithium](https://modrinth.com/mod/lithium)  
+ティック処理や物理計算、ライトなどの処理を高速化するMOD。
+
+- [ModernFix](https://modrinth.com/mod/modernfix)  
+色々な最適化処理やバグ修正を含むオールマイティ軽量化MOD。
+
+- [Noisium](https://modrinth.com/mod/noisium)  
+ワールド生成関係の処理を最適化&軽量化し、ラグを軽減するMOD。
+
+### 音ブロック系
+音ブロックで曲を作るうえで必須、またはあったら便利なMODについてです。
+
+- [BlockTuner](https://modrinth.com/mod/blocktuner)  
+音ブロック専用のGUIを追加し、音階の変更を簡単にするMOD。
+
+- [Command Macros](https://modrinth.com/mod/command-macros)  
+キーにコマンドを割り当てられるようになるMOD。  
+後述のWorldEditなどと組み合わせるとGood。
+
+- [Cubes Without Borders](https://modrinth.com/mod/cubes-without-borders)  
+マイクラのフルスクリーンをボーダーレスフルスクリーンにするMOD。
+作業中に他画面をアクティブ化してもフルスクリーンウィンドウが最小化されないようになり、  
+シームレスにウィンドウ間を移動できるようになる。(負荷ちょい高め)
+
+- [ReplayMod](https://modrinth.com/mod/replaymod)  
+言わずとしれた超有名録画MOD。
+音ブロックの撮影に使用するなど。(筆者は使っていないが)
+
+- [NoteBetter](https://github.com/chsbuffer/NoteBetter)  
+chsbufferさんによって最新版まで対応している。ありがたい。  
+音域や音色を追加&変更&拡張することができるMOD。
+
+- [Raise Sound Limit Simplified](https://modrinth.com/mod/rsls)  
+マイクラの同時再生可能音源数を拡張するMOD。  
+デフォルトだと24音源までだが、最大で4095音源まで同時再生を可能にしてくれる。  
+立体音響をやるなら必須級のMOD。
+
+- [Carpet](https://modrinth.com/mod/carpet)  
+tickコマンドでティック速度を変更したり、飛行中の当たり判定をなくしたり、色々な便利機能が詰まったMOD。
+
+- [Carpet TIS Addition](https://modrinth.com/mod/carpet-tis-addition)  
+主にレッドストーン周りの便利な機能が追加される、Carpetの機能拡張MOD。  
+レッドストーン鉱石の上に置いたリピーターのティック数を半分にする機能が便利。
+
+### その他便利Mod
+音ブロックの作成の補助やマイクラそのものを快適にしてくれるMod。
+
+- [BetterF3](https://modrinth.com/mod/betterf3)  
+F3キーを押すと出てくるデバッグ画面の視認性を大幅に上げたり、カスマイズできるようになるMOD。
+
+- [MiniHUD](https://modrinth.com/mod/minihud)  
+画面の上に上方を常駐させることができるMOD。  
+見ているブロックの座標を表示し続けたり、現在時刻や座標を画面上にずっと置いておける。
+
+- [Mouse Tweaks](https://modrinth.com/mod/mouse-tweaks)  
+インベントリ操作を楽にしてくれる。結構挙動に癖があるので、好みが分かれるかも。  
+筆者はこれがないとインベントリ操作が出来ない()。
+
+- [Tweakeroo](https://modrinth.com/mod/tweakeroo)  
+建築系における便利機能を多数追加するMOD。  
+機能が本当に多いので、各自調べることをおすすめする。  
+飛行速度の変更/高速設置あたりが便利機能。
+
+- [WorldEdit](https://modrinth.com/plugin/worldedit)  
+言わずとしれた(n回目)建築補助MOD。  
+木の斧一本で様々なブロックの操作を行う事ができる。  
+作業効率が格段に上がるため、必須級。
+
+- [WorldEditCUI](https://modrinth.com/mod/worldedit-cui)  
+先述のworldeditの選択範囲を可視化するMOD。  
+巨大な範囲を選択するときに役に立つし視認性も良くなるので、worldeditを入れるならセットでいれることをおすすめする。
+
+### 前提MOD
+前述のMOD群を動かすために必要な前提MOD達。
+
+- [Cloth Config API](https://modrinth.com/mod/cloth-config)
+- [FabricAPI](https://modrinth.com/mod/fabric-api)
+- [Fabric Language Kotlin](https://modrinth.com/mod/fabric-language-kotlin)
+- [Forge Config API Port](https://modrinth.com/mod/forge-config-api-port)
+- [MaLiLib](https://modrinth.com/mod/malilib)
+- [YetAnotherConfigLib](https://modrinth.com/mod/yacl)
+
+## 使用データパック
+自作です。  
+機能としては
+- tickコマンドの設定&維持 (ワールドの入退出に対応)
+- 曲の再生をコマンドで行えるように
+- etc (不便に思った事があったら追加予定)  
+です。
+ほしかったら[Lineside/X](https://x.com/_lineside_)までDMしていただければ喜んで配布させていただきます。(バージョンを伝えていただければカスタマイズします)  
+いらないとは思いますが。  
+
+## 使用リソースパック
+- [Better Noteblocks(StyleA)](https://www.curseforge.com/minecraft/texture-packs/better-jappa-noteblocks-style-a)  
+見やすいので使い続けている音階をテクスチャとして表示してくれます。  
+いちいち確認しなくていいので便利。
+- NoteBetter  
+音源追加用。  
+詳しくは[やまゆー氏のnote記事](https://note.com/minecraft256/n/n4aec81c92dd2)をご参照ください。めちゃくちゃわかりやすいので。
+
+## まとめ
+というわけで今回はMinecraft JavaEdition v1.20.1 Fabricで音ブロック用の環境を構築してみて、そのときに導入したMODやデータパックなどを紹介しました。  
+この記事を執筆するにあたって参考にさせていただいたはっかく氏、やまゆー氏に感謝を。  
+
+## References
+- [【Minecraft】音ブロック用Modまとめ(1.18.2Fabric)](https://note.com/hakukak/n/n402a404e310b) / はっかく氏
+- [音ブロ用にmodded環境構築](https://note.com/minecraft256/n/n741108898f2c) / やまゆー氏

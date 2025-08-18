@@ -22,7 +22,7 @@ import tailwindcss from '@tailwindcss/vite'
 import vercel from '@astrojs/vercel';
 
 export default defineConfig({
-  site: 'https://astro-erudite.vercel.app',
+  site: 'https://lineside-blog.vercel.app',
 
   integrations: [
     expressiveCode({

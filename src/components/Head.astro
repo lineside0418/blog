@@ -42,6 +42,20 @@ import Favicons from './Favicons.astro'
     title={SITE.title}
     href={new URL('rss.xml', Astro.site)}
   />
+  <!-- サイト名を明示 -->
+  <meta name="application-name" content="lineside" />
+  <meta property="og:site_name" content="lineside" />
+  <meta name="apple-mobile-web-app-title" content="lineside" />
+
+  <!-- 構造化データでサイト名を指定 -->
+  <script type="application/ld+json">
+    {JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "lineside",
+      "url": Astro.site || "https://lineside-blog.vercel.app",
+    })}
+  </script>
 
   <Favicons />
   <ClientRouter />

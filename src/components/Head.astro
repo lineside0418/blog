@@ -57,6 +57,15 @@ import Favicons from './Favicons.astro'
     })}
   </script>
 
+  <!-- Google tag (gtag.js) -->
+  <script type="text/partytown" src="https://www.googletagmanager.com/gtag/js?id=G-4B2C0B5VQT" async></script>
+  <script type="text/partytown">
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-4B2C0B5VQT');
+  </script>
+
   <Favicons />
   <ClientRouter />
 

@@ -9,7 +9,6 @@ import { getRecentPosts, getPickupPosts } from '@/lib/data-utils'
 const blog = await getRecentPosts(SITE.featuredPostCount)
 const pickupPosts = await getPickupPosts()
 
-// ここに表示したいYouTubeの動画IDを追加するんだよ！
 const videoIds = ['DZRH4pQHHjo', 'SBEc_uhhRFg', 'vpCFuivt5EA']
 ---
 
@@ -31,47 +30,52 @@ const videoIds = ['DZRH4pQHHjo', 'SBEc_uhhRFg', 'vpCFuivt5EA']
   <section class="mb-16">
     <h2 class="text-3xl font-bold tracking-tight text-center mb-10 flex items-center justify-center">
       <span class="w-8 h-px bg-gray-300 dark:bg-gray-600 mr-4"></span>
-      Pick Up Posts
+      <span class="flex flex-col items-center">
+        <span class="text-xs font-light tracking-widest text-muted-foreground">注目の記事</span>
+        Pick Up Posts
+      </span>
       <span class="w-8 h-px bg-gray-300 dark:bg-gray-600 ml-4"></span>
     </h2>
-    {
-      pickupPosts.length > 0 ? (
-        <ul class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {pickupPosts.map((post) => (
-            <li>
-              <BlogCard entry={post} />
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <div class="text-center text-muted-foreground">
-          <p>現在ピックアップ記事はありません。</p>
-          <p class="text-sm">No featured posts at the moment.</p>
-        </div>
-      )
-    }
+
+    {pickupPosts.length > 0 ? (
+      <ul class="space-y-4">
+        {pickupPosts.map((post) => (
+          <li>
+            <BlogCard entry={post} layout="list" />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <div class="text-center text-muted-foreground">
+        <p>現在ピックアップ記事はありません。</p>
+        <p class="text-sm">No featured posts at the moment.</p>
+      </div>
+    )}
   </section>
 
   {/* Recent Posts セクション */}
   <section class="mb-16">
     <h2 class="text-3xl font-bold tracking-tight text-center mb-10 flex items-center justify-center">
       <span class="w-8 h-px bg-gray-300 dark:bg-gray-600 mr-4"></span>
-      Recent Posts
+      <span class="flex flex-col items-center">
+        <span class="text-xs font-light tracking-widest text-muted-foreground">最新の記事</span>
+        Recent Posts
+      </span>
       <span class="w-8 h-px bg-gray-300 dark:bg-gray-600 ml-4"></span>
     </h2>
+
     <ul class="space-y-4">
       {blog.map((post) => (
         <li>
-          <BlogCard entry={post} />
+          <BlogCard entry={post} layout="list" />
         </li>
       ))}
     </ul>
+
     <div class="flex justify-center mt-8">
       <Link
         href="/blog"
-        class={buttonVariants({
-          variant: 'outline',
-        }) +
+        class={buttonVariants({ variant: 'outline' }) +
           ' group border-2 border-primary text-primary hover:bg-primary hover:text-primary-foreground'}
       >
         See All Posts
@@ -84,9 +88,13 @@ const videoIds = ['DZRH4pQHHjo', 'SBEc_uhhRFg', 'vpCFuivt5EA']
   <section class="mb-16">
     <h2 class="text-3xl font-bold tracking-tight text-center mb-10 flex items-center justify-center">
       <span class="w-8 h-px bg-gray-300 dark:bg-gray-600 mr-4"></span>
-      Videos
+      <span class="flex flex-col items-center">
+        <span class="text-xs font-light tracking-widest text-muted-foreground">動画</span>
+        Videos
+      </span>
       <span class="w-8 h-px bg-gray-300 dark:bg-gray-600 ml-4"></span>
     </h2>
+
     <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
       {videoIds.map((id) => (
         <div class="aspect-video overflow-hidden rounded-xl border dark:border-gray-800 shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-105">
@@ -106,20 +114,11 @@ const videoIds = ['DZRH4pQHHjo', 'SBEc_uhhRFg', 'vpCFuivt5EA']
 
 <style>
   @keyframes blob {
-    0% {
-      transform: translate(0px, 0px) scale(1);
-    }
-    33% {
-      transform: translate(30px, -50px) scale(1.1);
-    }
-    66% {
-      transform: translate(-20px, 20px) scale(0.9);
-    }
-    100% {
-      transform: translate(0px, 0px) scale(1);
-    }
+    0% { transform: translate(0px, 0px) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+    100% { transform: translate(0px, 0px) scale(1); }
   }
-  .animation-delay-2000 {
-    animation-delay: 2s;
-  }
+
+  .animation-delay-2000 { animation-delay: 2s; }
 </style>

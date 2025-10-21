@@ -27,11 +27,11 @@
 
 @layer components {
   .prose {
-    @apply text-foreground text-base leading-7;
+    @apply text-foreground text-base text-[1.1rem] leading-7;
     @apply [&>link[rel="stylesheet"]+*]:mt-0! [&>link[rel="stylesheet"]+*>*]:mt-0!;
 
     :where(p):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-      @apply text-foreground/80 my-5;
+      @apply  tracking-normal leading-8 text-foreground/80 my-5;
     }
 
     :where(h1, h2, h3, h4, h5, h6):not(
@@ -46,11 +46,18 @@
     }
 
     :where(h2):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-      @apply mt-8 mb-4 text-2xl;
+      @apply mt-16 mb-6 text-3xl font-semibold tracking-wide border-b border-muted-foreground tracking-wider;
+      padding-bottom: 0.7rem;          /* 下線と文字の間隔 */
+      width: 100%;                      /* 横幅いっぱい */
     }
 
     :where(h3):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-      @apply mt-8 mb-4 text-xl;
+      @apply mt-8 mb-4 text-xl font-medium pl-5 relative;
+    }
+
+    :where(h3)::before {
+      content: '';
+      @apply absolute left-0 top-1/2 -translate-y-1/2 w-2 h-6 bg-muted-foreground;
     }
 
     :where(h4):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
@@ -66,20 +73,20 @@
     }
 
     :where(strong):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-      @apply text-foreground font-medium;
+      @apply text-foreground font-semibold;
     }
 
     :where(ul):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-      @apply marker:text-foreground/30 my-5 ml-6 list-disc [&>li]:mt-2;
+      @apply marker:text-foreground/30 my-5 ml-6 list-disc [&>li]:mt-3;
     }
 
     :where(ol):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-      @apply marker:text-foreground/30 my-5 ml-6 list-decimal [&>li]:mt-2;
+      @apply marker:text-foreground/30 my-5 ml-6 list-decimal [&>li]:mt-4;
       @apply [&[type='A']]:list-[upper-alpha] [&[type='I']]:list-[upper-roman] [&[type='a']]:list-[lower-alpha] [&[type='i']]:list-[lower-roman];
     }
 
     :where(li):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-      @apply text-foreground/80 pl-2 [&>p]:my-0;
+      @apply text-foreground/80 pl-1 [&>p]:my-0;
     }
 
     :where(ul ul, ol ol, ul ol, ol ul):not(
@@ -89,7 +96,7 @@
     }
 
     :where(code):not(:where([class~='not-prose'], [class~='not-prose'] *)) {
-      @apply bg-muted/50 text-foreground relative rounded-sm px-[0.3rem] py-[0.2rem] text-sm font-medium break-words;
+      @apply bg-muted/50 text-foreground relative rounded-sm px-[0.3rem] py-[0.2rem] text-sm font-light break-words;
       @apply [&>span[data-line='']>*]:text-(--shiki-light) dark:[&>span[data-line='']>*]:text-(--shiki-dark);
     }
 

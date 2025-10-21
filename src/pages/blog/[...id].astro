@@ -115,22 +115,22 @@ const tocSections = await getTOCSections(currentPostId)
           alt={post.data.title}
           width={1200}
           height={630}
-          class="col-span-full mx-auto w-full max-w-5xl object-cover"
+          class="rounded-2xl col-span-full mx-auto w-full max-w-4xl object-cover"
         />
       )
     }
 
-    <section class="col-start-2 flex flex-col gap-y-6 text-center">
+    <section class="col-start-2 flex flex-col gap-y-6 text-left">
       <div class="flex flex-col">
         <h1
-          class="mb-2 scroll-mt-31 text-3xl leading-tight font-medium sm:text-4xl"
+          class="mt-2 mb-6 scroll-mt-31 text-3xl leading-tight tracking-wide font-bold sm:text-4xl"
           id="post-title"
         >
           {post.data.title}
         </h1>
 
         <div
-          class="text-muted-foreground divide-border mb-4 flex flex-col items-center justify-center divide-y text-xs sm:flex-row sm:flex-wrap sm:divide-x sm:divide-y-0 sm:text-sm"
+          class="text-muted-foreground divide-border mb-4 flex flex-col items-center justify-start divide-y text-xs sm:flex-row sm:flex-wrap sm:divide-x sm:divide-y-0 sm:text-sm"
         >
           {
             authors.length > 0 && (
@@ -193,7 +193,7 @@ const tocSections = await getTOCSections(currentPostId)
             )
           }
         </div>
-        <div class="flex flex-wrap justify-center gap-2">
+        <div class="mb-4 flex flex-wrap justify-start gap-2">
           {
             post.data.tags &&
               post.data.tags.length > 0 &&
@@ -209,12 +209,6 @@ const tocSections = await getTOCSections(currentPostId)
           }
         </div>
       </div>
-
-      <PostNavigation
-        newerPost={navigation.newer}
-        olderPost={navigation.older}
-        parentPost={isCurrentSubpost ? navigation.parent : undefined}
-      />
     </section>
 
     {
@@ -223,7 +217,7 @@ const tocSections = await getTOCSections(currentPostId)
       )
     }
 
-    <article class="prose col-start-2 max-w-3xl mx-auto mt-6">
+    <article class="prose col-start-2 max-w-4xl mx-auto mt-6">
       <Content />
     </article>
 

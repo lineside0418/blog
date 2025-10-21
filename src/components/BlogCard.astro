@@ -25,13 +25,10 @@ const authors = await parseAuthors(entry.data.authors ?? [])
 const subpostCount = !isSubpost(entry.id) ? await getSubpostCount(entry.id) : 0
 ---
 
-<div
-  class="bg-background hover:bg-secondary/50 rounded-xl border p-4 transition-colors duration-300 ease-in-out"
->
-  <Link href={`/${entry.collection}/${entry.id}`} class="flex flex-row gap-4">
-    {/* 画像：左側 */}
+<div class="bg-background hover:bg-secondary/50 rounded-xl border p-4 transition-colors duration-300 ease-in-out">
+  <Link href={`/${entry.collection}/${entry.id}`} class="flex flex-col sm:flex-row gap-4 items-start">
     {entry.data.image && (
-      <div class="w-40 h-28 flex-shrink-0 overflow-hidden rounded-lg">
+      <div class="flex-shrink-0 w-full sm:w-40 h-24 sm:h-32 overflow-hidden rounded-lg">
         <Image
           src={entry.data.image}
           alt={entry.data.title}
@@ -41,11 +38,9 @@ const subpostCount = !isSubpost(entry.id) ? await getSubpostCount(entry.id) : 0
         />
       </div>
     )}
-
-    {/* テキスト部分 */}
-    <div class="flex flex-col justify-between grow">
+    <div class="grow flex flex-col">
       <h3 class="mb-1 text-lg font-medium">{entry.data.title}</h3>
-      <p class="text-muted-foreground mb-2 text-sm line-clamp-3">{entry.data.description}</p>
+      <p class="text-muted-foreground mb-2 text-sm">{entry.data.description}</p>
 
       <div class="text-muted-foreground mb-2 flex flex-wrap items-center gap-x-2 text-xs">
         {authors.length > 0 && (
